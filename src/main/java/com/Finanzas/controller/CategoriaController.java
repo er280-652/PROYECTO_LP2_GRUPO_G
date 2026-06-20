@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("categoria")
 public class CategoriaController {
 
-	private CategoriaService categoriaService;
+	private final CategoriaService categoriaService;
 	
 	@GetMapping("listado")
 	public String listado(Model model) {
-		model.addAttribute("lstCategorias", categoriaService.getAll());
-		return "finanzas/";
+	    model.addAttribute("lstCategorias", categoriaService.getAll());
+	    return "movimiento/listadoCategoria";
 	}
 }
