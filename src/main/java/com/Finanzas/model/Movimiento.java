@@ -1,6 +1,7 @@
 
 package com.Finanzas.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -36,7 +37,7 @@ public class Movimiento {
 	private String descripcion;
 	
 	@Column(name = "monto")
-	private Double monto;
+	private BigDecimal monto;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_categoria")

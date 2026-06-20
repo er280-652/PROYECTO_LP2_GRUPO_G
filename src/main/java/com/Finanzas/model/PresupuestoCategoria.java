@@ -1,5 +1,7 @@
 package com.Finanzas.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,7 +30,7 @@ public class PresupuestoCategoria {
 	private Integer idPresupuestoCategoria;
 	
 	@Column(name = "monto_asignado")
-	private Double montoAsignado;
+	private BigDecimal montoAsignado;
 	
 	
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 
 package com.Finanzas.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -30,7 +31,7 @@ public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_usuario")
-	private Integer usuario;
+	private Integer idUsuario;
 	
 	@Column(name = "nombres")
 	private String nombres;
@@ -49,7 +50,7 @@ public class Usuario {
 	private String telefono;
 	
 	@Column(name = "fecha_registro")
-	private LocalDateTime fechaRegistro;
+	private LocalDate fechaRegistro;
 	
 	@Column(name = "activo")
 	private Boolean activo;
