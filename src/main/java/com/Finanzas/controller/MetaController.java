@@ -18,7 +18,7 @@ public class MetaController {
 	
 	@GetMapping("metas")
 	public String listado(Model model) {
-		model.addAttribute("lstMovimientos", metaService.getAll());
+		model.addAttribute("lstMetas", metaService.getAll());
 		return "movimiento/metas";
 	}
 }
