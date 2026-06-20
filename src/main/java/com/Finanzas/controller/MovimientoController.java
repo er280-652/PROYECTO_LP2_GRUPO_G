@@ -19,6 +19,6 @@ public class MovimientoController {
 	@GetMapping("listado")
 	public String listado(Model model) {
 		model.addAttribute("lstMovimientos", movimientoService.getAll());
-		return "movimiento/listado";
+		return "dashboard/movimientosListado";
 	}
 }
