@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("movimiento")
 public class MovimientoController {
 
-	private MovimientoService movimientoService;
+	private final MovimientoService movimientoService;
 	
 	@GetMapping("listado")
 	public String listado(Model model) {
