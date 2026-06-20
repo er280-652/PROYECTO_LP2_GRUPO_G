@@ -3,8 +3,9 @@ package com.Finanzas.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.Finanzas.model.Meta;
 import com.Finanzas.model.Tipo;
 @Repository
-public interface MetaRepository extends JpaRepository<MetaRepository, Integer>{
+public interface MetaRepository extends JpaRepository<Meta, Integer>{
 
 }
