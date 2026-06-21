@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layoutBase(contenido)">
+
+<head>
+	<title>Ejemplos Prof. Ernesto Arbulú - CIBERFARMA</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<!-- para el datatable -->
+	<link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.css">
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+	<script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.js"></script>
+	
+	<link rel="stylesheet" th:href="@{/css/layout.css}">
+</head>
+
+<body>
+	<!-- Header -->
+	<header class="header">
+		<div class="container-fluid d-flex justify-content-between align-items-center py-2">
+			<div class="btn-menu">
+				<label for="btn-menu"><i class="fa-solid fa-bars"></i></label>
+			</div>
+			<div class="text-white">
+				<h1 class="h5 m-0">Finanzas - Bienvenido, <span th:text="${session.fullName}"></span></h1>
+			</div>
+		</div>
+	</header>
+
+	<!-- Checkbox toggle -->
+	<input type="checkbox" id="btn-menu">
+
+	<!-- Menú Lateral -->
+	<div class="container-menu">
+		<div class="cont-menu">
+			<nav>
+				<a th:href="@{/dashboard}"><i class="fa-solid fa-house"></i> Inicio</a>
+				<a th:href="@{/producto/listado}"><i class="fa-brands fa-cash-app"></i> Ingresos</a>
+				<a th:href="@{/boleta/gastos}"><i class="fa-solid fa-sack-xmark"></i> Gastos</a>
+				<a th:href="@{/boleta/presupuesto}"><i class="fa-solid fa-wallet"></i> Presupuestos</a>
+				<a th:href="@{/boleta/metas}"><i class="fa-solid fa-bullseye"></i> Metas</a>
+				<a th:href="@{/boleta/reportes}"><i class="fa-solid fa-chart-pie"></i> Reportes</a>
+				<a th:href="@{/usuario/listado}"><i class="fa-solid fa-user"></i> Perfil</a>
+				<a th:href="@{/boleta/listado}"><i class="fa-solid fa-gear"></i> Configuracion</a>
+				<a href="#" id="cerrarSesionLink"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</a>
+			</nav>
+			<label for="btn-menu"><i class="fa-solid fa-xmark"></i></label>
+		</div>
+	</div>
+
+	<main style="padding: 70px;">
+		<div class="container mt-5 pt-5 text-white" th:replace="${contenido}">
+			[Contenido aquí]
+		</div>
+	</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
+	<script>
+		$("#cerrarSesionLink").on("click", function () {
+			Swal.fire({
+				title: "¿Deseas cerrar sesión?",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Sí, cerrar",
+				cancelButtonText: "No"
+			}).then((result) => {
+				if (result.isConfirmed) {
+					window.location.href = "/logout";
+				}
+			});
+		});
+	</script>
+	
+	<th:block th:utext="${alert}"></th:block>
+	<th:block th:utext="${toast}"></th:block>
+</body>
+
+</html>

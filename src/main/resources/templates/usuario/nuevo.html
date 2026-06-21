@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido">
+    <div class="container mt-5">
+        <div class="card shadow-lg">
+            <div class="card-body">
+
+                <h2>Nuevo Usuario</h2>
+
+                <form th:action="@{/usuario/registrar}"
+                      method="post"
+                      th:object="${usuario}">
+
+
+                    <div class="mb-3">
+                        <label>Nombres</label>
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{nombres}"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Apellidos</label>
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{apellidos}"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Cuenta</label>
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{cuenta}"
+                               required>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label>Clave</label>
+                        <input type="password"
+                               class="form-control"
+                               th:field="*{clave}"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Tipo</label>
+                        <select class="form-select"
+                                th:field="*{tipo.idTipo}"
+                                required>
+                            <option value="">-- Seleccione --</option>
+                            <option th:each="item : ${tipos}"
+                                    th:value="${item.idTipo}"
+                                    th:text="${item.descripcion}">
+                            </option>
+                        </select>
+                    </div>
+                    <input type="hidden" th:field="*{activo}" value="true">
+
+                    <button class="btn btn-success w-100">
+                        Guardar
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

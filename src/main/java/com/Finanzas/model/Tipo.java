@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_tipo")
+@Table(name = "tbl_rol")
 public class Tipo {
 
 	@Id

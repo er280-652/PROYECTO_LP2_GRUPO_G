@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido" class="text-white text-start">
+	<div class="row mb-3">
+		<h2 class="text-white text-start">Dashboard</h2>
+
+		<th:block th:utext="${alert}"></th:block>
+		<th:block th:utext="${toast}"></th:block>
+	</div>
+</div>
+</html>

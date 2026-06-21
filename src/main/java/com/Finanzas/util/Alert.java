@@ -57,7 +57,7 @@ public class Alert {
 						<script>
 							Swal.fire({
 								title: '%s',
-								text: '%s',
+								html: '%s',
 								imageUrl: '%s',
 								imageWidth: 400,
 								imageHeight: 400,

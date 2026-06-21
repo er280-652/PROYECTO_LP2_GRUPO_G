@@ -7,5 +7,7 @@ import com.Finanzas.model.Tipo;
 import com.Finanzas.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
+	
+	Usuario findByCuentaAndClave(String cuenta, String clave);
 
 }

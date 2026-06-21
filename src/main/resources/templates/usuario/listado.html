@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layoutBase(~{::contenido})">
+
+<div th:fragment="contenido">
+    <div class="container mt-5">
+        <div class="card shadow-lg">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <h1 class="card-title">Usuarios</h1>
+                    </div>
+
+                    <div class="col-md-2">
+                        <a th:href="@{/usuario/nuevo}"
+                           class="btn btn-success w-100">
+                            <i class="fa-solid fa-plus"></i> Nuevo
+                        </a>
+                    </div>
+                </div>
+
+                <hr>
+
+                <table id="tbl-usuario"
+                       class="table table-hover table-responsive">
+
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Cuenta</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="table-secondary">
+                        <tr th:each="item : ${usuarios}">
+                            <td th:text="${item.idUsuario}" class="text-center"></td>
+                            <td th:text="${item.nombres}"></td>
+                            <td th:text="${item.apellidos}"></td>
+                            <td th:text="${item.cuenta}"></td>
+                            <td th:text="${item.tipo.descripcion}"></td>
+                            <td>
+                                <span class="badge"
+                                      th:classappend="(${item.activo}) ? 'bg-success' : 'bg-secondary'"
+                                      th:text="${item.activoDescripcion}">
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+                                <a th:href="@{/usuario/edicion/{id}(id=${item.idUsuario})}"
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </a>
+
+                                <form method="post"
+                                      th:action="@{/usuario/cambiar-estado}"
+                                      style="display:inline;">
+                                    <input type="hidden"
+                                           name="id"
+                                           th:value="${item.idUsuario}">
+									
+                                    
+											<button type="submit"
+                                            class="btn btn-outline-warning btn-sm">
+                                        <i class="fa-solid fa-toggle-on"></i>
+                                    </button>
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+	<script>
+		$(document).ready(function () {
+			$('#tbl-usuario').DataTable({
+				language: {
+					search: "Buscar: ",
+					url: 'https://cdn.datatables.net/plug-ins/2.0.3/i18n/es-ES.json',
+				}
+			});
+		});
+	</script>
+
+</div>
+</html>

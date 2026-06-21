@@ -40,17 +40,15 @@ public class Usuario {
 	private String apellidos;
 	
 	
-	@Column(name = "correo")
-	private String correo;
+	@Column(name = "cuenta")
+	private String cuenta;
 	
 	@Column(name = "clave")
 	private String clave;
 	
-	@Column(name = "telefono")
-	private String telefono;
 	
-	@Column(name = "fecha_registro")
-	private LocalDate fechaRegistro;
+	@Column(name = "fecha_nac")
+	private LocalDate fecha_nac;
 	
 	@Column(name = "activo")
 	private Boolean activo;
@@ -58,4 +56,13 @@ public class Usuario {
 	@ManyToOne
 	@JoinColumn(name = "id_tipo")
 	private Tipo tipo;
+	
+	public String getFullName() {
+		return String.format("%s %s", nombres, apellidos);
+	}
+	
+	public String getActivoDescripcion() {
+		return activo ? "Activo" : "Inactivo";
+	}
+	
 }
