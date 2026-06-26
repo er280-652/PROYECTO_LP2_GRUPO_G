@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layoutBase(~{::contenido})}">
+
+<div th:fragment="contenido">
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-plus"></i>
+                Nueva Categoría
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form th:action="@{/categoria/registrar}"
+                  th:object="${categoria}"
+                  method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Descripción</label>
+                    <input type="text"
+                           th:field="*{descripcion}"
+                           class="form-control"
+                           placeholder="Ejemplo: Sueldo, Comida, Transporte"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Tipo</label>
+                    <select th:field="*{tipo}"
+                            class="form-select"
+                            required>
+                        <option value="">Seleccione</option>
+                        <option value="INGRESO">INGRESO</option>
+                        <option value="GASTO">GASTO</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-save"></i>
+                    Guardar
+                </button>
+
+                <a href="/categoria/listado" class="btn btn-secondary">
+                    Volver
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+</html>

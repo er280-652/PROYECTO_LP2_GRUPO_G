@@ -47,4 +47,7 @@ public class Movimiento {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
+	
+	@Column(name = "estado")
+	private Boolean activo;
 }

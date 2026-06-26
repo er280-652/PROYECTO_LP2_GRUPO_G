@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Ingresos</title>
+</head>
+<body>
+
+<h2>Listado de Ingresos
+	<a href="/movimiento/ingresos/nuevo" class="btn btn-success mb-3">
+	    Nuevo ingreso
+	</a>
+
+
+	</a>
+
+	<table class="table table-bordered table-striped">
+	    <thead>
+	        <tr>
+	            <th>ID</th>
+	            <th>Fecha</th>
+	            <th>Descripción</th>
+	            <th>Monto</th>
+	            <th>Categoría</th>
+	            <th>Acciones</th>
+	        </tr>
+	    </thead>
+
+	    <tbody>
+	        <tr th:each="m : ${lstMovimiento}">
+	            <td th:text="${m.idMovimiento}"></td>
+	            <td th:text="${m.fecha}"></td>
+	            <td th:text="${m.descripcion}"></td>
+	            <td th:text="${m.monto}"></td>
+	            <td th:text="${m.categoria.descripcion}"></td>
+	            <td>
+	                <a th:href="@{/movimiento/ingresos/editar/{id}(id=${m.idMovimiento})}"
+	                   class="btn btn-warning btn-sm">
+	                    Editar
+	                </a>
+	            </td>
+	        </tr>
+	    </tbody>
+	</table>
+
+</body>
+</html>

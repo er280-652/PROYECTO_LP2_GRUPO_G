@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layoutBase(~{::contenido})}">
+
+<div th:fragment="contenido">
+
+    <!-- Contenedor centrado horizontal y verticalmente (ajusta el min-vh si es necesario) -->
+    <div class="d-flex justify-content-center align-items-center my-5">
+        
+        <!-- Tarjeta con ancho controlado y sombra suave -->
+        <div class="card shadow border-0" style="width: 100%; max-width: 550px;">
+            
+            <!-- Cabecera de la tarjeta en tono Success (Verde para ingresos) -->
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0 text-center">
+                    <i class="fa-solid fa-arrow-trend-up me-2"></i>Nuevo Ingreso
+                </h4>
+            </div>
+
+            <!-- Cuerpo de la tarjeta -->
+            <div class="card-body p-4">
+                
+                <form th:action="@{/movimiento/ingresos/registrar}"
+                      th:object="${movimiento}"
+                      method="post"
+                      class="needs-validation" novalidate>
+
+                    <!-- Campo: Fecha -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">
+                            <i class="fa-solid fa-calendar-days me-1"></i> Fecha
+                        </label>
+                        <input type="date" th:field="*{fecha}" class="form-control form-control-lg" required>
+                    </div>
+
+                    <!-- Campo: Descripción -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Descripción
+                        </label>
+                        <input type="text" th:field="*{descripcion}" class="form-control" placeholder="Ej. Pago de factura" required>
+                    </div>
+
+                    <!-- Campo: Monto -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">
+                            <i class="fa-solid fa-money-bill-wave me-1"></i> Monto (S/.)
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light fw-bold">S/.</span>
+                            <input type="number" step="0.01" th:field="*{monto}" class="form-control" placeholder="0.00" required>
+                        </div>
+                    </div>
+
+                    <!-- Campo: Categoría -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-secondary">
+                            <i class="fa-solid fa-tags me-1"></i> Categoría
+                        </label>
+                        <select th:field="*{categoria.idCategoria}" class="form-select" required>
+                            <option value="">Seleccione una categoría</option>
+                            <option th:each="c : ${categorias}"
+                                    th:value="${c.idCategoria}"
+                                    th:text="${c.descripcion}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <hr class="text-muted my-4">
+
+                    <!-- Botones de Acción distribuidos de forma profesional -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/movimiento/ingresos" class="btn btn-outline-secondary px-4 me-md-2">
+                            <i class="fa-solid fa-xmark me-1"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Ingreso
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</html>

@@ -1,63 +1,190 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>Categorías</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layoutBase(~{::contenido})}">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<div th:fragment="contenido">
 
-</head>
-<body>
+    <div class="card shadow border-0">
 
-<div class="container mt-4">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-list"></i> Movimientos
+            </h4>
 
-    <h2>Movimientos listado</h2>
+            <a href="/movimiento/nuevo" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Nuevo Movimiento
+            </a>
+        </div>
 
-    <a th:href="@{/categoria/nuevo}" class="btn btn-primary mb-3">
-        Nueva Categoría
-    </a>
+        <div class="card-body">
 
-    <table class="table table-bordered">
+            <h5 class="mb-3">Filtros</h5>
 
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Descripción</th>
-                <th>Tipo</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
+            <div class="row mb-4 align-items-end">
 
-        <tbody>
+                <div class="col-md-3">
+                    <label class="form-label">Tipo</label>
+                    <select id="filtroTipo" class="form-select">
+                        <option value="">--Todos--</option>
+                        <option value="INGRESO">INGRESO</option>
+                        <option value="GASTO">GASTO</option>
+                    </select>
+                </div>
 
-            <tr th:each="c : ${lstCategorias}">
+                <div class="col-md-3">
+                    <label class="form-label">Categoría</label>
+                    <select id="filtroCategoria" class="form-select">
+                        <option value="">--Todas--</option>
+                        <option th:each="m : ${lstMovimiento}"
+                                th:value="${m.categoria.descripcion}"
+                                th:text="${m.categoria.descripcion}">
+                        </option>
+                    </select>
+                </div>
 
-                <td th:text="${c.idCategoria}"></td>
+                <div class="col-md-3 offset-md-3 text-end">
+                    <button id="btnLimpiar" type="button" class="btn btn-secondary">
+                        <i class="fa-solid fa-broom"></i> Limpiar
+                    </button>
+                </div>
 
-                <td th:text="${c.descripcion}"></td>
+            </div>
 
-                <td th:text="${c.tipo}"></td>
+            <div class="table-responsive">
 
-                <td>
+                <table id="tablaMovimientos"
+                       class="table table-bordered table-hover align-middle text-center">
 
-                    <a class="btn btn-warning btn-sm"
-                       th:href="@{/categoria/edicion/{id}(id=${c.idCategoria})}">
-                        Editar
-                    </a>
+                    <thead class="text-white" style="background-color: #0d6efd;">
+                        <tr>
+                            <th>Id</th>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Categoría</th>
+                            <th>Tipo</th>
+                            <th>Activo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
 
-                </td>
+                    <tbody>
+                        <tr th:each="m : ${lstMovimiento}"
+                            th:classappend="${!m.activo} ? 'table-secondary text-muted' : ''">
 
-            </tr>
+                            <td th:text="${m.idMovimiento}"></td>
 
-        </tbody>
+                            <td th:text="${m.fecha}"></td>
 
-    </table>
+                            <td th:text="${m.descripcion}"></td>
+
+                            <td>
+                                <span th:if="${m.categoria.tipo == 'INGRESO'}"
+                                      class="fw-bold text-success">
+                                    S/. <span th:text="${m.monto}"></span>
+                                </span>
+
+                                <span th:if="${m.categoria.tipo == 'GASTO'}"
+                                      class="fw-bold text-danger">
+                                    S/. <span th:text="${m.monto}"></span>
+                                </span>
+                            </td>
+
+                            <td th:text="${m.categoria.descripcion}"></td>
+
+                            <td>
+                                <span th:if="${m.categoria.tipo == 'INGRESO'}"
+                                      class="badge bg-success">
+                                    INGRESO
+                                </span>
+
+                                <span th:if="${m.categoria.tipo == 'GASTO'}"
+                                      class="badge bg-danger">
+                                    GASTO
+                                </span>
+                            </td>
+
+                            <td>
+                                <span th:if="${m.activo}" class="badge bg-success">
+                                    Activo
+                                </span>
+
+                                <span th:if="${!m.activo}" class="badge bg-secondary">
+                                    Inactivo
+                                </span>
+                            </td>
+
+                            <td>
+                                <a class="btn btn-outline-primary btn-sm"
+                                   th:href="@{/movimiento/edicion/{id}(id=${m.idMovimiento})}">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+
+                                <form th:action="@{/movimiento/desactivar}"
+                                      method="post"
+                                      style="display:inline;">
+
+                                    <input type="hidden"
+                                           name="id"
+                                           th:value="${m.idMovimiento}">
+
+                                    <button type="submit"
+                                            th:class="${m.activo} ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm'"
+                                            onclick="return confirm('¿Deseas cambiar el estado de este movimiento?');">
+
+                                        <i th:class="${m.activo} ? 'fa-solid fa-toggle-on' : 'fa-solid fa-toggle-off'"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(lstMovimiento)}">
+                            <td colspan="8" class="text-muted py-4">
+                                No hay movimientos registrados.
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            const tabla = $('#tablaMovimientos').DataTable({
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    zeroRecords: "No se encontraron movimientos",
+                    paginate: {
+                        next: "Siguiente",
+                        previous: "Anterior"
+                    }
+                }
+            });
+
+            $('#filtroTipo').on('change', function () {
+                tabla.column(5).search(this.value).draw();
+            });
+
+            $('#filtroCategoria').on('change', function () {
+                tabla.column(4).search(this.value).draw();
+            });
+
+            $('#btnLimpiar').on('click', function () {
+                $('#filtroTipo').val('');
+                $('#filtroCategoria').val('');
+                tabla.search('').columns().search('').draw();
+            });
+
+        });
+    </script>
 
 </div>
-
-<div th:if="${toast}" th:utext="${toast}"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-</body>
 </html>

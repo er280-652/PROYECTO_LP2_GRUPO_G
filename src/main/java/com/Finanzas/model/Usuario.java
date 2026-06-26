@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -50,10 +51,10 @@ public class Usuario {
 	@Column(name = "fecha_nac")
 	private LocalDate fecha_nac;
 	
-	@Column(name = "activo")
+	@Column(name = "estado")
 	private Boolean activo;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_tipo")
 	private Tipo tipo;
 	

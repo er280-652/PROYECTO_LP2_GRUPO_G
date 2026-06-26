@@ -6,7 +6,16 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+
+	<body style="background-image: url('/imagenes/loginImage.jpeg');
+	             background-size: cover;
+	             background-position: center;
+	             background-repeat: no-repeat;
+	             background-attachment: fixed;
+	             min-height: 100vh;">
+
 </head>
+
 <body>
 
 <div class="container mt-4">
@@ -14,46 +23,54 @@
     <h2>Panel de Control</h2>
     <hr>
 
-    <div class="row">
+    <div class="row g-4">
 
         <div class="col-md-4">
-            <div class="card border-primary">
+            <div class="card border-primary h-100 dashboard-card">
                 <div class="card-body text-center">
                     <h4>Categorías</h4>
                     <p>Administrar categorías de ingresos y gastos</p>
-
-                    <a th:href="@{/categoria/listado}"
-                       class="btn btn-primary">
-                        Ingresar
-                    </a>
+                    <a href="/categoria/listado" class="btn btn-primary">Ingresar</a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card border-success">
+            <div class="card border-success h-100 dashboard-card">
                 <div class="card-body text-center">
                     <h4>Movimientos</h4>
-                    <p>Registrar ingresos y gastos</p>
-
-                    <a th:href="@{/movimiento/listado}"
-                       class="btn btn-success">
-                        Ingresar
-                    </a>
+                    <p>Registrar y consultar ingresos y gastos</p>
+                    <a href="/movimiento/listado" class="btn btn-success">Ingresar</a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card border-warning">
+            <div class="card border-info h-100 dashboard-card">
+                <div class="card-body text-center">
+                    <h4>Presupuesto</h4>
+                    <p>Administrar presupuesto mensual</p>
+                    <a href="/presupuesto/listado" class="btn btn-info">Ingresar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-warning h-100 dashboard-card">
                 <div class="card-body text-center">
                     <h4>Metas</h4>
                     <p>Administrar metas de ahorro</p>
+                    <a href="/meta/listado" class="btn btn-warning">Ingresar</a>
+                </div>
+            </div>
+        </div>
 
-					<a th:href="@{/movimiento/metas}"
-					   class="btn btn-warning">
-					    Ingresar
-					</a>
+        <div class="col-md-4">
+            <div class="card border-secondary h-100 dashboard-card">
+                <div class="card-body text-center">
+                    <h4>Reportes</h4>
+                    <p>Consultar reportes financieros</p>
+                    <a href="/reportes" class="btn btn-secondary">Ingresar</a>
                 </div>
             </div>
         </div>

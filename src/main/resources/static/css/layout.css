@@ -4,17 +4,48 @@
 	box-sizing: border-box;
 	font-family: 'Poppins', sans-serif;
 }
-
-body {
-	background-image: url('/imagenes/loginImage.jpeg');
-	/* ajusta con tu imagen */
-	background-size: cover;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
-	background-position: center;
-	min-height: 100vh;
+.dashboard-fondo {
+    background-image: url('/imagenes/loginImage.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 80vh;
 }
 
+.cont-menu nav a.submenu-link {
+    padding-left: 42px;
+    font-size: 14px;
+    color: #9fd3ff;
+}
+
+.cont-menu nav a.submenu-link:hover {
+    background: #2a2a2a;
+    border-left: 5px solid #4dabf7;
+}
+
+
+.submenu {
+    display: none; 
+    list-style: none;
+    padding-left: 20px; 
+}
+
+
+.nav-item:hover .submenu {
+    display: block;
+}
+body {
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+.dashboard-fondo {
+    background-image: url('/imagenes/loginImage.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+}	
 .header {
 	width: 100%;
 	position: fixed;
