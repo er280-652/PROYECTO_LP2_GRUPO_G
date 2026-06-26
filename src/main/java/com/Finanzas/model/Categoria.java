@@ -29,4 +29,11 @@ public class Categoria {
 	
 	@Column(name = "tipo")
 	private String tipo;
+	
+	@Column(name = "estado")
+	private Boolean activo;
+	
+	public String getActivoDescripcion() {
+		return activo ? "Activo" : "Inactivo";
+	}
 }

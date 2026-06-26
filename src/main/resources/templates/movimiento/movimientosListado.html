@@ -42,9 +42,9 @@
 					    <tr th:each="m : ${lstMovimiento}"
 					        th:classappend="${m.activo == false} ? 'table-secondary text-muted' : ''">
 
-					        <td th:text="${m.idMovimiento}"></td>
+					        <td th:text="${m.idMovimiento}" class="text-center"></td>
 
-					        <td th:text="${m.fecha}"></td>
+					        <td th:text="${m.fecha}" class="text-center"></td>
 
 					        <td th:text="${m.descripcion}"></td>
 

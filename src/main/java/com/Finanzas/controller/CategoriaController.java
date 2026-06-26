@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.Finanzas.model.Categoria;
 import com.Finanzas.service.CategoriaService;
+import com.Finanzas.service.TipoService;
 import com.Finanzas.util.Alert;
 
 import lombok.RequiredArgsConstructor;
@@ -35,13 +37,19 @@ public class CategoriaController {
     }
 
     @PostMapping("registrar")
-    public String registrar(@ModelAttribute Categoria categoria,
-                            RedirectAttributes flash) {
-
-        var response = categoriaService.create(categoria);
-
-        flash.addFlashAttribute("toast",
-                Alert.sweetToast(response.mensaje(), "success", 5000));
+    public String registrar(@ModelAttribute Categoria categoria,Model model, RedirectAttributes flash) {
+                         
+    var response = categoriaService.create(categoria);
+        
+    if (!response.success()) {
+    	  model.addAttribute("categoria", categoria);
+          model.addAttribute("alert", Alert.sweetAlertError(response.mensaje()));
+          
+          return "movimiento/categoriaNuevo";
+	}
+        
+    var toast = Alert.sweetToast(response.mensaje(), "success", 5000);
+    flash.addFlashAttribute("toast",toast);
 
         return "redirect:/categoria/listado";
     }
@@ -53,13 +61,31 @@ public class CategoriaController {
     }
 
     @PostMapping("guardar")
-    public String guardar(@ModelAttribute Categoria categoria,
-                          RedirectAttributes flash) {
-
+    public String guardar(@ModelAttribute Categoria categoria, Model model, RedirectAttributes flash) {
+                         
         var response = categoriaService.update(categoria);
 
-        flash.addFlashAttribute("toast",
-                Alert.sweetToast(response.mensaje(), "success", 5000));
+        if (!response.success()) {
+			model.addAttribute("categoria", categoria);
+			model.addAttribute("alert", Alert.sweetAlertError(response.mensaje()));
+			
+			return "movimiento/categoriaEdicion";
+		}
+        
+        var toast = Alert.sweetToast(response.mensaje(), "success", 5000);
+       flash.addFlashAttribute("toast",toast);
+
+        return "redirect:/categoria/listado";
+    }
+    
+    
+    @PostMapping("desactivar")
+    public String cambiarEstado(@RequestParam Integer id,RedirectAttributes flash) {
+
+        var response = categoriaService.changeActive(id);
+
+        var toast = Alert.sweetToast(response.mensaje(), "success", 5000);
+        flash.addFlashAttribute("toast", toast);
 
         return "redirect:/categoria/listado";
     }

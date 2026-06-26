@@ -8,6 +8,7 @@ import com.Finanzas.dto.ResultadoResponse;
 import com.Finanzas.model.Categoria;
 import com.Finanzas.repository.CategoriaRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -30,6 +31,7 @@ public class CategoriaService {
 
     public ResultadoResponse create(Categoria categoria) {
         try {
+        	categoria.setActivo(true);
             categoriaRepository.save(categoria);
             return new ResultadoResponse(true, "Categoría registrada correctamente");
         } catch (Exception e) {
@@ -40,6 +42,11 @@ public class CategoriaService {
 
     public ResultadoResponse update(Categoria categoria) {
         try {
+        	
+        	var categoriaBD = categoriaRepository.findById(categoria.getIdCategoria()).orElseThrow();
+        	
+        	categoria.setActivo(categoriaBD.getActivo());
+        	
             categoriaRepository.save(categoria);
             return new ResultadoResponse(true, "Categoría actualizada correctamente");
         } catch (Exception e) {
@@ -47,4 +54,28 @@ public class CategoriaService {
             return new ResultadoResponse(false, "Error al actualizar categoría");
         }
     }
+    
+    @Transactional
+	public ResultadoResponse changeActive(Integer id) {
+		try {
+			var categoria = categoriaRepository.findById(id).orElseThrow();
+			
+			Boolean activo = categoria.getActivo();
+			
+			if (activo == null) {
+				activo = true;
+			}
+			
+			categoria.setActivo(!activo);
+			
+			var estado = categoria.getActivo() ? "Activo" : "desactivado";
+			var mensaje = String.format("Usuario con ID %s %s", categoria.getIdCategoria(), estado);
+			
+			return new ResultadoResponse(true, mensaje);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResultadoResponse(false, "Hubo un error en la transacción");
+		}
+	}
 }
