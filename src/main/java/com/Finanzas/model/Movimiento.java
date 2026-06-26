@@ -49,5 +49,5 @@ public class Movimiento {
 	private Usuario usuario;
 	
 	@Column(name = "estado")
-	private Boolean activo;
+	private Boolean activo = true;
 }

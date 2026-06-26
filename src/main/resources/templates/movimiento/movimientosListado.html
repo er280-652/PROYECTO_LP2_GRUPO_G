@@ -18,37 +18,7 @@
 
         <div class="card-body">
 
-            <h5 class="mb-3">Filtros</h5>
-
-            <div class="row mb-4 align-items-end">
-
-                <div class="col-md-3">
-                    <label class="form-label">Tipo</label>
-                    <select id="filtroTipo" class="form-select">
-                        <option value="">--Todos--</option>
-                        <option value="INGRESO">INGRESO</option>
-                        <option value="GASTO">GASTO</option>
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Categoría</label>
-                    <select id="filtroCategoria" class="form-select">
-                        <option value="">--Todas--</option>
-                        <option th:each="m : ${lstMovimiento}"
-                                th:value="${m.categoria.descripcion}"
-                                th:text="${m.categoria.descripcion}">
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-md-3 offset-md-3 text-end">
-                    <button id="btnLimpiar" type="button" class="btn btn-secondary">
-                        <i class="fa-solid fa-broom"></i> Limpiar
-                    </button>
-                </div>
-
-            </div>
+           
 
             <div class="table-responsive">
 
@@ -68,82 +38,84 @@
                         </tr>
                     </thead>
 
-                    <tbody>
-                        <tr th:each="m : ${lstMovimiento}"
-                            th:classappend="${!m.activo} ? 'table-secondary text-muted' : ''">
+					<tbody>
+					    <tr th:each="m : ${lstMovimiento}"
+					        th:classappend="${m.activo == false} ? 'table-secondary text-muted' : ''">
 
-                            <td th:text="${m.idMovimiento}"></td>
+					        <td th:text="${m.idMovimiento}"></td>
 
-                            <td th:text="${m.fecha}"></td>
+					        <td th:text="${m.fecha}"></td>
 
-                            <td th:text="${m.descripcion}"></td>
+					        <td th:text="${m.descripcion}"></td>
 
-                            <td>
-                                <span th:if="${m.categoria.tipo == 'INGRESO'}"
-                                      class="fw-bold text-success">
-                                    S/. <span th:text="${m.monto}"></span>
-                                </span>
+					        <td>
+					            <span th:if="${m.categoria.tipo == 'ingreso'}"
+					                  class="fw-bold text-success">
+					                S/. <span th:text="${m.monto}"></span>
+					            </span>
 
-                                <span th:if="${m.categoria.tipo == 'GASTO'}"
-                                      class="fw-bold text-danger">
-                                    S/. <span th:text="${m.monto}"></span>
-                                </span>
-                            </td>
+					            <span th:if="${m.categoria.tipo == 'gasto'}"
+					                  class="fw-bold text-danger">
+					                S/. <span th:text="${m.monto}"></span>
+					            </span>
+					        </td>
 
-                            <td th:text="${m.categoria.descripcion}"></td>
+					        <td th:text="${m.categoria.descripcion}"></td>
 
-                            <td>
-                                <span th:if="${m.categoria.tipo == 'INGRESO'}"
-                                      class="badge bg-success">
-                                    INGRESO
-                                </span>
+					        <td>
+					            <span th:if="${m.categoria.tipo == 'ingreso'}"
+					                  class="badge bg-success">
+					                INGRESO
+					            </span>
 
-                                <span th:if="${m.categoria.tipo == 'GASTO'}"
-                                      class="badge bg-danger">
-                                    GASTO
-                                </span>
-                            </td>
+					            <span th:if="${m.categoria.tipo == 'gasto'}"
+					                  class="badge bg-danger">
+					                GASTO
+					            </span>
+					        </td>
 
-                            <td>
-                                <span th:if="${m.activo}" class="badge bg-success">
-                                    Activo
-                                </span>
+					        <td>
+					            <span th:if="${m.activo}" class="badge bg-success">
+					                Activo
+					            </span>
 
-                                <span th:if="${!m.activo}" class="badge bg-secondary">
-                                    Inactivo
-                                </span>
-                            </td>
+					            <span th:if="${m.activo == false}" class="badge bg-secondary">
+					                Inactivo
+					            </span>
+					        </td>
 
-                            <td>
-                                <a class="btn btn-outline-primary btn-sm"
-                                   th:href="@{/movimiento/edicion/{id}(id=${m.idMovimiento})}">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
+					        <td>
+					            <a class="btn btn-outline-primary btn-sm"
+					               th:href="@{/movimiento/edicion/{id}(id=${m.idMovimiento})}">
+					                <i class="fa-solid fa-pen-to-square"></i>
+					            </a>
 
-                                <form th:action="@{/movimiento/desactivar}"
-                                      method="post"
-                                      style="display:inline;">
+					            <form th:action="@{/movimiento/desactivar}"
+					                  method="post"
+					                  style="display:inline;">
 
-                                    <input type="hidden"
-                                           name="id"
-                                           th:value="${m.idMovimiento}">
+					                <input type="hidden"
+					                       name="id"
+					                       th:value="${m.idMovimiento}">
 
-                                    <button type="submit"
-                                            th:class="${m.activo} ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm'"
-                                            onclick="return confirm('¿Deseas cambiar el estado de este movimiento?');">
+					                <button type="submit"
+					                        th:class="${m.activo} ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm'"
+					                        onclick="return confirm('¿Deseas cambiar el estado de este movimiento?');">
 
-                                        <i th:class="${m.activo} ? 'fa-solid fa-toggle-on' : 'fa-solid fa-toggle-off'"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+					                    <i th:class="${m.activo} ? 'fa-solid fa-toggle-on' : 'fa-solid fa-toggle-off'"></i>
+					                </button>
 
-                        <tr th:if="${#lists.isEmpty(lstMovimiento)}">
-                            <td colspan="8" class="text-muted py-4">
-                                No hay movimientos registrados.
-                            </td>
-                        </tr>
-                    </tbody>
+					            </form>
+					        </td>
+
+					    </tr>
+
+					    <tr th:if="${#lists.isEmpty(lstMovimiento)}">
+					        <td colspan="8" class="text-muted py-4">
+					            No hay movimientos registrados.
+					        </td>
+					    </tr>
+					</tbody>
 
                 </table>
 
@@ -165,23 +137,16 @@
                     paginate: {
                         next: "Siguiente",
                         previous: "Anterior"
-                    }
+                    },
+					responsive: true,
+						columnDefs: [
+						{targets: [7], orderable: false},
+						{targets: [4,5,7], searchable: false}
+									]
                 }
             });
 
-            $('#filtroTipo').on('change', function () {
-                tabla.column(5).search(this.value).draw();
-            });
-
-            $('#filtroCategoria').on('change', function () {
-                tabla.column(4).search(this.value).draw();
-            });
-
-            $('#btnLimpiar').on('click', function () {
-                $('#filtroTipo').val('');
-                $('#filtroCategoria').val('');
-                tabla.search('').columns().search('').draw();
-            });
+           
 
         });
     </script>
