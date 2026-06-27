@@ -56,8 +56,14 @@
             <a th:href="@{/movimiento/gastos/nuevo}" class="submenu-link">
                 <i class="fa-solid fa-arrow-trend-down"></i> Nuevo gasto
             </a>
+			
+			<a th:if="${session.idTipo == 2}" th:href="@{/presupuesto/listado}">
+			    <i class="fa-solid fa-wallet"></i> Presupuesto
+			</a>
 
-         
+			<a th:if="${session.idTipo == 2}" th:href="@{/meta/listado}">
+			    <i class="fa-solid fa-bullseye"></i> Metas
+			</a>
 
 			<a th:href="@{/categoria/listado}">
 			    <i class="fa-solid fa-layer-group"></i> Categorías

@@ -12,7 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.Finanzas.model.Categoria;
 import com.Finanzas.service.CategoriaService;
-import com.Finanzas.service.TipoService;
 import com.Finanzas.util.Alert;
 
 import lombok.RequiredArgsConstructor;

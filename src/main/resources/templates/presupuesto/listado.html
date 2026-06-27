@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layoutBase(~{::contenido})}">
+
+<div th:fragment="contenido">
+	<div class="container mt-5">
+		<div class="card shadow-lg">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-10">
+						<h1 class="card-title">
+							<i class="fa-solid fa-wallet"></i> Presupuestos Generales
+						</h1>
+					</div>
+					<div class="col-md-2">
+						<a th:href="@{/presupuesto/nuevo}" class="btn btn-success w-100">
+							<i class="fa-solid fa-plus"></i> Nuevo
+						</a>
+					</div>
+				</div>
+				<hr>
+
+				<div class="row mb-3">
+					<fieldset class="border border-2 border-dark pb-2">
+						<legend class="float-none w-auto px-2">Filtros</legend>
+						<form th:action="@{/presupuesto/listado}" method="get" th:object="${filter}">
+							<div class="row align-items-end">
+								<div class="col-md-3">
+									<label for="mes" class="form-label">Mes</label>
+									<div class="input-group">
+										<span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+										<select class="form-select" th:field="*{mes}">
+											<option value="">--Todos--</option>
+											<option th:each="item : ${meses}" th:value="${item}" th:text="${item}"></option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label for="anio" class="form-label">Año</label>
+									<div class="input-group">
+										<span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
+										<input type="number" min="1900" max="9999" class="form-control" th:field="*{anio}" placeholder="Ingrese un año">
+									</div>
+								</div>
+
+								<div class="col-md-6 text-end">
+									<button type="submit" class="btn btn-outline-dark">
+										<i class="fa-solid fa-binoculars"></i> Buscar
+									</button>
+									<a th:href="@{/presupuesto/listado}" class="btn btn-outline-secondary">
+										<i class="fa-solid fa-broom"></i> Limpiar
+									</a>
+								</div>
+							</div>
+						</form>
+					</fieldset>
+				</div>
+
+				<div class="table-responsive">
+					<table id="tbl-presupuesto" class="table table-hover table-responsive">
+						<thead class="table-dark text-center">
+							<tr>
+								<th>ID</th>
+								<th>Mes</th>
+								<th>Año</th>
+								<th>Monto total</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+
+						<tbody class="table-secondary">
+							<tr th:each="item : ${lstPresupuestos}">
+								<td th:text="${item.idPresupuesto}" class="text-center"></td>
+								<td th:text="${item.mes}"></td>
+								<td th:text="${item.anio}" class="text-center"></td>
+								<td th:attr="data-order=${item.montoTotal}" th:text="|S/. ${#numbers.formatDecimal(item.montoTotal, 1, 'COMMA', 2, 'POINT')}|" class="text-end"></td>
+								<td class="text-center">
+									<a th:href="@{/presupuesto-categoria/listado/{id}(id=${item.idPresupuesto})}" class="btn btn-outline-success btn-sm">
+										<i class="fa-solid fa-tags"></i> Categorías
+									</a>
+
+									<a th:href="@{/presupuesto/edicion/{id}(id=${item.idPresupuesto})}" class="btn btn-outline-primary btn-sm">
+										<i class="fa-regular fa-pen-to-square"></i>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			$('#tbl-presupuesto').DataTable({
+				language: {
+					emptyTable: "No hay presupuestos registrados",
+					url: 'https://cdn.datatables.net/plug-ins/2.0.3/i18n/es-ES.json'
+				},
+				pageLength: 10,
+				lengthMenu: [5, 10, 25, 50],
+				ordering: true,
+				searching: false,
+				order: [ [3, 'desc'] ],
+				columnDefs: [
+					{ targets: [0, 1, 2, 4], orderable: false }
+				]
+			});
+		});
+	</script>
+</div>
+</html>

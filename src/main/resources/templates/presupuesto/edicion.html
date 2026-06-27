@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layoutBase(~{::contenido})}">
+
+<div th:fragment="contenido">
+	<div class="container mt-5">
+		<div class="card shadow-lg">
+			<div class="card-body">
+				<h1 class="card-title text-center" th:text="|Editar Presupuesto - ID ${presupuesto.idPresupuesto}|"></h1>
+
+				<div class="row d-flex justify-content-center">
+					<div class="col-md-6">
+						<form id="form-presupuesto" th:action="@{/presupuesto/guardar}" th:object="${presupuesto}" class="row g-2" method="post" novalidate>
+							<input type="hidden" th:field="*{idPresupuesto}">
+
+							<div class="col-md-6 position-relative">
+								<label class="form-label">Mes</label>
+								<div class="input-group">
+									<span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+									<select class="form-select" th:field="*{mes}" required>
+										<option value="" selected hidden="hidden">--Seleccione--</option>
+										<option th:each="item : ${meses}" th:value="${item}" th:text="${item}"></option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-md-6 position-relative">
+								<label class="form-label">Año</label>
+								<div class="input-group">
+									<span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
+									<input type="number" min="1900" max="9999" class="form-control" th:field="*{anio}" placeholder="Ingrese un año" required>
+								</div>
+							</div>
+
+							<div class="col-md-12 position-relative">
+								<label class="form-label">Monto total</label>
+								<div class="input-group">
+									<span class="input-group-text">S/.</span>
+									<input type="number" step="0.01" min="0.01" class="form-control" th:field="*{montoTotal}" placeholder="Ingrese un monto" required>
+							</div>
+
+							<div class="col-md-12 d-flex justify-content-between mt-3">
+								<a th:href="@{/presupuesto/listado}" class="btn btn-outline-dark">
+									<i class="fa-solid fa-reply"></i> Regresar
+								</a>
+
+								<button type="submit" class="btn btn-primary">
+									<i class="fa-solid fa-floppy-disk"></i> Guardar
+								</button>
+
+								<button type="reset" class="btn btn-secondary">
+									<i class="fa-solid fa-broom"></i> Limpiar
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			$("#form-presupuesto").validate({
+				rules: {
+					mes: {
+						required: true
+					},
+					anio: {
+						required: true,
+						digits: true,
+						min: 1900,
+						max: 9999
+					},
+					montoTotal: {
+						required: true,
+						min: 0.01
+					}
+				},
+				messages: {
+					mes: {
+						required: "campo requerido"
+					},
+					anio: {
+						required: "campo requerido",
+						digits: "solo se permiten números",
+						min: "ingrese un año válido",
+						max: "ingrese un año válido"
+					},
+					montoTotal: {
+						required: "campo requerido",
+						min: "el monto debe ser mayor a 0"
+					}
+				},
+				errorElement: 'div',
+				errorClass: 'invalid-tooltip',
+				highlight: function (element) {
+					$(element).addClass('is-invalid').removeClass('is-valid');
+				},
+				unhighlight: function (element) {
+					$(element).removeClass('is-invalid').addClass('is-valid');
+				}
+			});
+		});
+	</script>
+</div>
+</html>

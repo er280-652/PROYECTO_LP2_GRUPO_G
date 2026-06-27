@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layoutBase(~{::contenido})}">
+
+<div th:fragment="contenido">
+	<div class="container mt-5">
+		<div class="card shadow-lg">
+			<div class="card-body">
+				<div class="row mb-3">
+					<div class="col-md-10">
+						<h1 class="card-title">Listado de metas</h1>
+					</div>
+					<div class="col-md-2">
+						<a th:href="@{/meta/nuevo}" class="btn btn-success w-100">
+							<i class="fa-solid fa-plus"></i> Nueva
+						</a>
+					</div>
+				</div>
+				
+				<fieldset class="border border-2 border-dark pb-2 mb-3">
+					<legend class="float-none w-auto px-2">Filtros</legend>
+					<form th:action="@{/meta/listado}" method="get" th:object="${filter}">
+						<div class="row align-items-end px-2">
+							<div class="col-md-4 position-relative">
+								<label class="form-label">Estado</label>
+								<div class="input-group">
+									<span class="input-group-text">
+										<i class="fa-solid fa-list-check"></i>
+									</span>
+									<select class="form-select" th:field="*{estado}">
+										<option value="">--Todos--</option>
+										<option value="incompleta">Incompleta</option>
+										<option value="completada">Completada</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-md-8 d-flex justify-content-end gap-2">
+								<button type="submit" class="btn btn-outline-dark">
+									<i class="fa-solid fa-binoculars"></i> Buscar
+								</button>
+								
+								<a th:href="@{/meta/listado}" class="btn btn-outline-secondary">
+									<i class="fa-solid fa-broom"></i> Limpiar
+								</a>
+							</div>
+						</div>
+					</form>
+				</fieldset>
+
+				<div class="table-responsive">
+					<table id="tbl-meta" class="table table-hover table-responsive">
+						<thead class="table-dark text-center">
+							<tr>
+								<th>ID</th>
+								<th>Nombre</th>
+								<th>Monto objetivo</th>
+								<th>Monto actual</th>
+								<th>Restante</th>
+								<th>Fecha límite</th>
+								<th>Avance</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+
+						<tbody class="table-secondary">
+							<tr th:each="item : ${lstMetas}">
+								<td th:text="${item.idMeta}" class="text-center"></td>
+								<td th:text="${item.nombre}"></td>
+								<td th:attr="data-order=${item.montoObjetivo}"
+									th:text="|S/. ${#numbers.formatDecimal(item.montoObjetivo, 1, 'COMMA', 2, 'POINT')}|"
+									class="text-end"></td>
+								<td th:attr="data-order=${item.montoActual}"
+									th:text="|S/. ${#numbers.formatDecimal(item.montoActual, 1, 'COMMA', 2, 'POINT')}|"
+									class="text-end"></td>
+								<td th:attr="data-order=${item.montoRestante}"
+									th:text="|S/. ${#numbers.formatDecimal(item.montoRestante, 1, 'COMMA', 2, 'POINT')}|"
+									class="text-end"></td>
+								<td th:text="${item.fechaObjetivo}" class="text-center"></td>
+								<td class="text-center">
+									<span th:text="|${#numbers.formatDecimal(item.porcentajeAvance, 1, 'COMMA', 2, 'POINT')}%|"></span>
+								</td>
+								<td class="text-center">
+									<span class="badge" th:classappend="${item.badgeEstado}" th:text="${item.estadoDescripcion}"></span>
+								</td>
+								<td class="text-center">
+									<div class="d-flex justify-content-center align-items-center gap-2">
+										<a th:href="@{/meta/edicion/{id}(id=${item.idMeta})}"
+										   class="btn btn-outline-primary btn-sm" title="Editar">
+											<i class="fa-regular fa-pen-to-square"></i> Editar
+										</a>
+										<a th:href="@{/aporte-meta/listado/{id}(id=${item.idMeta})}"
+										   class="btn btn-outline-success btn-sm" title="Aportes">
+											<i class="fa-solid fa-coins"></i> Aportes
+										</a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			$('#tbl-meta').DataTable({
+				language: {
+					emptyTable: "No hay metas registradas",
+					url: 'https://cdn.datatables.net/plug-ins/2.0.3/i18n/es-ES.json'
+				},
+				pageLength: 10,
+				lengthMenu: [5, 10, 25, 50],
+				ordering: true,
+				searching: false,
+				order: [ [0, 'desc'] ],
+				columnDefs: [
+					{ targets: [0,1,7,8], orderable: false }
+				]
+			});
+		});
+	</script>
+</div>
+</html>

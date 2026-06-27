@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layoutBase(~{::contenido})}">
+
+<div th:fragment="contenido">
+	<div class="container mt-5">
+		<div class="card shadow-lg">
+			<div class="card-body">
+				<div class="row align-items-center">
+					<div class="col-md-8">
+						<h1 class="card-title">
+							<i class="fa-solid fa-tags"></i> Presupuesto por categoría
+						</h1>
+						<p class="mb-0 text-muted">
+							<span th:text="${presupuesto.mes}"></span> -
+							<span th:text="${presupuesto.anio}"></span>
+						</p>
+					</div>
+					<div class="col-md-2">
+						<a th:href="@{/presupuesto/listado}" class="btn btn-outline-dark w-100">
+							<i class="fa-solid fa-reply"></i> Volver
+						</a>
+					</div>
+					<div class="col-md-2">
+						<a th:href="@{/presupuesto-categoria/nuevo/{id}(id=${presupuesto.idPresupuesto})}" class="btn btn-success w-100">
+							<i class="fa-solid fa-plus"></i> Nueva
+						</a>
+					</div>
+				</div>
+				<hr>
+
+				<div class="row mb-3 text-center">
+					<div class="col-md-4">
+						<div class="border rounded p-3 bg-light">
+							<div class="fw-bold">Presupuesto total</div>
+							<div th:text="|S/. ${#numbers.formatDecimal(presupuesto.montoTotal, 1, 'COMMA', 2, 'POINT')}|"></div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="border rounded p-3 bg-light">
+							<div class="fw-bold">Total asignado</div>
+							<div th:text="|S/. ${#numbers.formatDecimal(totalAsignado, 1, 'COMMA', 2, 'POINT')}|"></div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="border rounded p-3 bg-light">
+							<div class="fw-bold">Saldo disponible</div>
+							<div th:text="|S/. ${#numbers.formatDecimal(saldoDisponible, 1, 'COMMA', 2, 'POINT')}|"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="table-responsive">
+					<table id="tbl-presupuesto-categoria" class="table table-hover table-responsive">
+						<thead class="table-dark text-center">
+							<tr>
+								<th>ID</th>
+								<th>Categoría</th>
+								<th>Tipo</th>
+								<th>Monto asignado</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+
+						<tbody class="table-secondary">
+							<tr th:each="item : ${lstPresupuestoCategoria}">
+								<td th:text="${item.idPresupuestoCategoria}" class="text-center"></td>
+								<td th:text="${item.categoria.descripcion}"></td>
+								<td class="text-center">
+									<span class="badge bg-danger" th:text="${#strings.toUpperCase(item.categoria.tipo)}"></span>
+								</td>
+								<td th:attr="data-order=${item.montoAsignado}" th:text="|S/. ${#numbers.formatDecimal(item.montoAsignado, 1, 'COMMA', 2, 'POINT')}|" class="text-end"></td>
+								<td class="text-center">
+									<span class="badge" th:classappend="${item.activo} ? 'bg-success' : 'bg-secondary'" th:text="${item.activoDescripcion}"></span>
+								</td>
+								<td class="text-center">
+									<div class="d-flex justify-content-center align-items-center gap-2">
+										<a th:href="@{/presupuesto-categoria/edicion/{id}(id=${item.idPresupuestoCategoria})}" class="btn btn-outline-primary btn-sm" title="Editar">
+											<i class="fa-regular fa-pen-to-square"></i>
+										</a>
+										<form method="post" th:action="@{/presupuesto-categoria/cambiar-estado}">
+											<input type="hidden" th:name="id" th:value="${item.idPresupuestoCategoria}">
+											<button type="submit" class="btn btn-sm"
+												th:classappend="${item.activo} ? 'btn-outline-danger' : 'btn-outline-success'"
+												th:title="${item.activo} ? 'Desactivar' : 'Activar'">
+												<i class="fa-solid" th:classappend="${item.activo} ? 'fa-toggle-off' : 'fa-toggle-on'"></i>
+												<span th:text="${item.activo} ? 'Desactivar' : 'Activar'"></span>
+											</button>
+										</form>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			$('#tbl-presupuesto-categoria').DataTable({
+				language: {
+					emptyTable: "No hay categorías asignadas a este presupuesto",
+					search: "Buscar: ",
+					url: 'https://cdn.datatables.net/plug-ins/2.0.3/i18n/es-ES.json'
+				},
+				order: [ [0, 'desc'] ],
+				columnDefs: [
+					{ targets: [0,2, 5], orderable: false },
+					{ targets: [0, 2, 5], searchable: false }
+				]
+			});
+		});
+	</script>
+</div>
+</html>

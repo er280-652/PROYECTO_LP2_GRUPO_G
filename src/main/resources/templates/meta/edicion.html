@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layoutBase(~{::contenido})}">
+
+<div th:fragment="contenido">
+	<div class="container mt-5">
+		<div class="card shadow-lg">
+			<div class="card-body">
+				<h1 class="card-title text-center">Editar meta</h1>
+
+				<div class="row d-flex justify-content-center">
+					<div class="col-md-6">
+						<form id="form-meta" th:action="@{/meta/guardar}" th:object="${meta}" class="row g-2" method="post" novalidate>
+
+							<input type="hidden" th:field="*{idMeta}">
+
+							<div class="col-md-12 position-relative">
+								<label class="form-label">Nombre</label>
+								<div class="input-group">
+									<span class="input-group-text"><i class="fa-solid fa-bullseye"></i></span>
+									<input type="text" class="form-control" th:field="*{nombre}" placeholder="Ingrese un nombre" required>
+								</div>
+							</div>
+
+							<div class="col-md-12 position-relative">
+								<label class="form-label">Descripción</label>
+								<div class="input-group">
+									<span class="input-group-text"><i class="fa-solid fa-align-left"></i></span>
+									<input type="text" class="form-control" th:field="*{descripcion}" placeholder="Descripción opcional">
+								</div>
+							</div>
+
+							<div class="col-md-6 position-relative">
+								<label class="form-label">Monto objetivo</label>
+								<div class="input-group">
+									<span class="input-group-text">S/.</span>
+									<input type="number" step="0.01" min="0.01" class="form-control" th:field="*{montoObjetivo}" placeholder="Ingrese un monto" required>
+								</div>
+							</div>
+
+							<div class="col-md-6 position-relative">
+								<label class="form-label">Monto actual</label>
+								<div class="input-group">
+									<span class="input-group-text">S/.</span>
+									<input type="number" step="0.01" min="0" class="form-control" th:field="*{montoActual}" placeholder="Ingrese un monto" required>
+								</div>
+							</div>
+
+							<div class="col-md-12 position-relative">
+								<label class="form-label">Fecha límite</label>
+								<div class="input-group">
+									<span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+									<input type="date" class="form-control" th:field="*{fechaObjetivo}" required>
+								</div>
+							</div>
+
+							<div class="col-md-12 d-flex justify-content-between mt-3">
+								<a th:href="@{/meta/listado}" class="btn btn-outline-dark">
+									<i class="fa-solid fa-reply"></i> Regresar
+								</a>
+
+								<button type="submit" class="btn btn-primary">
+									<i class="fa-solid fa-floppy-disk"></i> Guardar
+								</button>
+
+								<button type="reset" class="btn btn-secondary">
+									<i class="fa-solid fa-broom"></i> Limpiar
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			$("#form-meta").validate({
+				rules: {
+					nombre: { required: true },
+					montoObjetivo: { required: true, min: 0.01 },
+					montoActual: { required: true, min: 0 },
+					fechaObjetivo: { required: true }
+				},
+				messages: {
+					nombre: { required: "campo requerido" },
+					montoObjetivo: { required: "campo requerido", min: "el monto objetivo debe ser mayor a 0" },
+					montoActual: { required: "campo requerido", min: "el monto actual no puede ser negativo" },
+					fechaObjetivo: { required: "campo requerido" }
+				},
+				errorElement: 'div',
+				errorClass: 'invalid-tooltip',
+				highlight: function (element) {
+					$(element).addClass('is-invalid').removeClass('is-valid');
+				},
+				unhighlight: function (element) {
+					$(element).removeClass('is-invalid').addClass('is-valid');
+				}
+			});
+		});
+	</script>
+</div>
+</html>

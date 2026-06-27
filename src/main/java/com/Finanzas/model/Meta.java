@@ -1,4 +1,3 @@
-
 package com.Finanzas.model;
 
 import java.time.LocalDate;
@@ -54,4 +53,43 @@ public class Meta {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
+	
+	public String getCompletadaDescripcion() {
+		return Boolean.TRUE.equals(completada) ? "Completada" : "Incompleta";
+	}
+	
+	public Boolean getFechaLimitePasada() {
+		if (fechaObjetivo == null) {
+			return false;
+		}
+		
+		return LocalDate.now().isAfter(fechaObjetivo);
+	}
+	
+	public String getEstadoDescripcion() {
+		return Boolean.TRUE.equals(completada) ? "Completada" : "Incompleta";
+	}
+	
+	public String getBadgeEstado() {
+		return Boolean.TRUE.equals(completada) ? "bg-success" : "bg-secondary";
+	}
+	
+	public Double getMontoRestante() {
+		Double objetivo = montoObjetivo == null ? 0.0 : montoObjetivo;
+		Double actual = montoActual == null ? 0.0 : montoActual;
+		Double restante = objetivo - actual;
+		
+		return restante < 0 ? 0.0 : restante;
+	}
+	
+	public Double getPorcentajeAvance() {
+		if (montoObjetivo == null || montoObjetivo <= 0) {
+			return 0.0;
+		}
+		
+		Double actual = montoActual == null ? 0.0 : montoActual;
+		Double porcentaje = (actual * 100) / montoObjetivo;
+		
+		return porcentaje > 100 ? 100.0 : porcentaje;
+	}
 }

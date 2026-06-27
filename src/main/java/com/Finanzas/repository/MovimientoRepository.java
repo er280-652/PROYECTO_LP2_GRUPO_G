@@ -12,5 +12,5 @@ public interface MovimientoRepository extends JpaRepository<Movimiento, Integer>
 
     List<Movimiento> findAllByOrderByIdMovimientoDesc();
 
-    List<Movimiento> findByCategoriaTipoOrderByIdMovimientoDesc(String tipo);
+    List<Movimiento> findByCategoriaTipoIgnoreCaseOrderByIdMovimientoDesc(String tipo);
 }

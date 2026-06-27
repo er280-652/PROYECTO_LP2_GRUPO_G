@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layoutBase(~{::contenido})}">
+
+<div th:fragment="contenido">
+	<div class="container mt-5">
+		<div class="card shadow-lg">
+			<div class="card-body">
+				<h1 class="card-title text-center">Editar aporte</h1>
+				<p class="text-center text-muted">
+					Meta: <span th:text="${meta.nombre}"></span>
+				</p>
+
+				<div class="row d-flex justify-content-center">
+					<div class="col-md-6">
+						<form id="form-aporte-meta" th:action="@{/aporte-meta/guardar}" th:object="${aporteMeta}" class="row g-2" method="post" novalidate>
+
+							<input type="hidden" th:field="*{idAporte}">
+
+							<div class="col-md-12 position-relative">
+								<label class="form-label">Fecha</label>
+								<div class="input-group">
+									<span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+									<input type="date" class="form-control" th:field="*{fecha}" required>
+								</div>
+							</div>
+
+							<div class="col-md-12 position-relative">
+								<label class="form-label">Monto del aporte</label>
+								<div class="input-group">
+									<span class="input-group-text">S/.</span>
+									<input type="number" step="0.01" min="0.01" class="form-control" th:field="*{montoAporte}" placeholder="Ingrese un monto" required>
+								</div>
+							</div>
+
+							<div class="col-md-12 position-relative">
+								<label class="form-label">Observación</label>
+								<div class="input-group">
+									<span class="input-group-text"><i class="fa-solid fa-align-left"></i></span>
+									<input type="text" class="form-control" th:field="*{observacion}" placeholder="Observación opcional">
+								</div>
+							</div>
+
+							<div class="col-md-12 d-flex justify-content-between mt-3">
+								<a th:href="@{/aporte-meta/listado/{id}(id=${meta.idMeta})}" class="btn btn-outline-dark">
+									<i class="fa-solid fa-reply"></i> Regresar
+								</a>
+
+								<button type="submit" class="btn btn-primary">
+									<i class="fa-solid fa-floppy-disk"></i> Guardar
+								</button>
+
+								<button type="reset" class="btn btn-secondary">
+									<i class="fa-solid fa-broom"></i> Limpiar
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			$("#form-aporte-meta").validate({
+				rules: {
+					fecha: { required: true },
+					montoAporte: { required: true, min: 0.01 }
+				},
+				messages: {
+					fecha: { required: "campo requerido" },
+					montoAporte: { required: "campo requerido", min: "el aporte debe ser mayor a 0" }
+				},
+				errorElement: 'div',
+				errorClass: 'invalid-tooltip',
+				highlight: function (element) {
+					$(element).addClass('is-invalid').removeClass('is-valid');
+				},
+				unhighlight: function (element) {
+					$(element).removeClass('is-invalid').addClass('is-valid');
+				}
+			});
+		});
+	</script>
+</div>
+</html>

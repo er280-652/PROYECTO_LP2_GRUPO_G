@@ -74,6 +74,7 @@
 					            </span>
 					        </td>
 
+
 					        <td>
 					            <span th:if="${m.activo}" class="badge bg-success">
 					                Activo
@@ -86,7 +87,8 @@
 
 					        <td>
 					            <a class="btn btn-outline-primary btn-sm"
-					               th:href="@{/movimiento/edicion/{id}(id=${m.idMovimiento})}">
+					               th:href="@{/movimiento/edicion/{id}(id=${m.idMovimiento})}"
+					               title="Editar movimiento">
 					                <i class="fa-solid fa-pen-to-square"></i>
 					            </a>
 
@@ -129,6 +131,7 @@
         $(document).ready(function () {
 
             const tabla = $('#tablaMovimientos').DataTable({
+                responsive: true,
                 language: {
                     search: "Buscar:",
                     lengthMenu: "Mostrar _MENU_ registros",
@@ -137,13 +140,12 @@
                     paginate: {
                         next: "Siguiente",
                         previous: "Anterior"
-                    },
-					responsive: true,
-						columnDefs: [
-						{targets: [7], orderable: false},
-						{targets: [4,5,7], searchable: false}
-									]
-                }
+                    }
+                },
+                columnDefs: [
+                    { targets: [7], orderable: false },
+                    { targets: [4, 5, 7], searchable: false }
+                ]
             });
 
            

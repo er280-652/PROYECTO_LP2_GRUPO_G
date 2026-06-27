@@ -1,5 +1,7 @@
 package com.Finanzas.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.Finanzas.dto.MetaFilter;
-import com.Finanzas.model.Meta;
-import com.Finanzas.service.MetaService;
+import com.Finanzas.dto.PresupuestoFilter;
+import com.Finanzas.model.Presupuesto;
+import com.Finanzas.service.PresupuestoService;
 import com.Finanzas.util.Alert;
 
 import jakarta.servlet.http.HttpSession;
@@ -19,104 +21,115 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("meta")
-public class MetaController {
+@RequestMapping("presupuesto")
+public class PresupuestoController {
 
-	private final MetaService metaService;
+	private final PresupuestoService presupuestoService;
 	
 	@GetMapping("listado")
-	public String listado(@ModelAttribute MetaFilter filter, Model model, HttpSession session, RedirectAttributes flash) {
+	public String listado(@ModelAttribute PresupuestoFilter filter, Model model, HttpSession session, RedirectAttributes flash) {
 		String ruta = validarAcceso(session, flash);
-		
 		if (ruta != null) {
 			return ruta;
 		}
 		
 		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-		model.addAttribute("lstMetas", metaService.search(filter, idUsuario));
+		
+		model.addAttribute("lstPresupuestos", presupuestoService.search(filter, idUsuario));
+		model.addAttribute("meses", getMeses());
 		model.addAttribute("filter", filter);
 		
-		return "meta/listado";
+		return "presupuesto/listado";
 	}
 	
 	@GetMapping("nuevo")
 	public String nuevo(Model model, HttpSession session, RedirectAttributes flash) {
 		String ruta = validarAcceso(session, flash);
-		
 		if (ruta != null) {
 			return ruta;
 		}
 		
-		model.addAttribute("meta", new Meta());
+		Presupuesto presupuesto = new Presupuesto();
+		presupuesto.setAnio(presupuestoService.getAnioActual());
 		
-		return "meta/nuevo";
+		model.addAttribute("presupuesto", presupuesto);
+		cargarDatosFormulario(model);
+		
+		return "presupuesto/nuevo";
 	}
 	
 	@PostMapping("registrar")
-	public String registrar(@ModelAttribute Meta meta, Model model, HttpSession session, RedirectAttributes flash) {
+	public String registrar(@ModelAttribute Presupuesto presupuesto, Model model, HttpSession session, RedirectAttributes flash) {
 		String ruta = validarAcceso(session, flash);
-		
 		if (ruta != null) {
 			return ruta;
 		}
 		
 		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-		var response = metaService.create(meta, idUsuario);
+		var response = presupuestoService.create(presupuesto, idUsuario);
 		
 		if (!response.success()) {
-			model.addAttribute("meta", meta);
+			model.addAttribute("presupuesto", presupuesto);
+			cargarDatosFormulario(model);
 			model.addAttribute("alert", Alert.sweetAlertError(response.mensaje()));
-			return "meta/nuevo";
+			return "presupuesto/nuevo";
 		}
 		
 		var toast = Alert.sweetToast(response.mensaje(), "success", 5000);
 		flash.addFlashAttribute("toast", toast);
-		
-		return "redirect:/meta/listado";
+		return "redirect:/presupuesto/listado";
 	}
 	
 	@GetMapping("edicion/{id}")
 	public String edicion(@PathVariable Integer id, Model model, HttpSession session, RedirectAttributes flash) {
 		String ruta = validarAcceso(session, flash);
-		
 		if (ruta != null) {
 			return ruta;
 		}
 		
 		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-		var meta = metaService.getOne(id, idUsuario);
+		var presupuesto = presupuestoService.getOne(id, idUsuario);
 		
-		if (meta == null) {
-			flash.addFlashAttribute("toast", Alert.sweetToast("Meta no encontrada", "error", 5000));
-			return "redirect:/meta/listado";
+		if (presupuesto == null) {
+			flash.addFlashAttribute("toast", Alert.sweetToast("Presupuesto no encontrado", "error", 5000));
+			return "redirect:/presupuesto/listado";
 		}
 		
-		model.addAttribute("meta", meta);
+		model.addAttribute("presupuesto", presupuesto);
+		cargarDatosFormulario(model);
 		
-		return "meta/edicion";
+		return "presupuesto/edicion";
 	}
 	
 	@PostMapping("guardar")
-	public String guardar(@ModelAttribute Meta meta, Model model, HttpSession session, RedirectAttributes flash) {
+	public String guardar(@ModelAttribute Presupuesto presupuesto, Model model, HttpSession session, RedirectAttributes flash) {
 		String ruta = validarAcceso(session, flash);
-		
 		if (ruta != null) {
 			return ruta;
 		}
 		
 		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
-		var response = metaService.update(meta, idUsuario);
+		var response = presupuestoService.update(presupuesto, idUsuario);
 		
 		if (!response.success()) {
-			model.addAttribute("meta", meta);
+			model.addAttribute("presupuesto", presupuesto);
+			cargarDatosFormulario(model);
 			model.addAttribute("alert", Alert.sweetAlertError(response.mensaje()));
-			return "meta/edicion";
+			return "presupuesto/edicion";
 		}
 		
 		var toast = Alert.sweetToast(response.mensaje(), "success", 5000);
 		flash.addFlashAttribute("toast", toast);
-		
-		return "redirect:/meta/listado";
+		return "redirect:/presupuesto/listado";
+	}
+	
+	private void cargarDatosFormulario(Model model) {
+		model.addAttribute("meses", getMeses());
+		model.addAttribute("anioActual", presupuestoService.getAnioActual());
+	}
+	
+	private List<String> getMeses() {
+		return List.of("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
 	}
 	
 	private String validarAcceso(HttpSession session, RedirectAttributes flash) {
@@ -127,7 +140,7 @@ public class MetaController {
 		Object idTipo = session.getAttribute("idTipo");
 		
 		if (idTipo == null || !idTipo.toString().equals("2")) {
-			flash.addFlashAttribute("toast", Alert.sweetToast("La sección metas solo está disponible para usuarios", "error", 5000));
+			flash.addFlashAttribute("toast", Alert.sweetToast("La sección presupuesto solo está disponible para usuarios", "error", 5000));
 			return "redirect:/dashboard";
 		}
 		

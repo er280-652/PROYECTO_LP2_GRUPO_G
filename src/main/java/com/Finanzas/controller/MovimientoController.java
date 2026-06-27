@@ -89,9 +89,10 @@ public class MovimientoController {
         movimiento.setUsuario(usuario);
 
         var response = movimientoService.update(movimiento);
+        var icon = response.success() ? "success" : "error";
 
         flash.addFlashAttribute("toast",
-                Alert.sweetToast(response.mensaje(), "success", 5000));
+                Alert.sweetToast(response.mensaje(), icon, 5000));
 
         return "redirect:/movimiento/listado";
     }
@@ -100,8 +101,9 @@ public class MovimientoController {
     @PostMapping("desactivar")
     public String desactivar(@RequestParam Integer id, RedirectAttributes flash) {
         var response = movimientoService.desactivar(id);
+        var icon = response.success() ? "success" : "error";
         flash.addFlashAttribute("toast",
-                Alert.sweetToast(response.mensaje(), "success", 5000));
+                Alert.sweetToast(response.mensaje(), icon, 5000));
         return "redirect:/movimiento/listado";
     }
     

@@ -11,4 +11,8 @@ import com.Finanzas.model.Categoria;
 public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
     List<Categoria> findByTipo(String tipo);
+    
+    List<Categoria> findByTipoIgnoreCaseAndActivoTrue(String tipo);
+    
+    Categoria findByDescripcionIgnoreCaseAndTipoIgnoreCaseAndActivoTrue(String descripcion, String tipo);
 }

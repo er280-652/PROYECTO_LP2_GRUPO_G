@@ -24,6 +24,9 @@ public class CategoriaService {
     public List<Categoria> getByTipo(String tipo) {
         return categoriaRepository.findByTipo(tipo);
     }
+    public List<Categoria> getGastosActivos() {
+        return categoriaRepository.findByTipoIgnoreCaseAndActivoTrue("gasto");
+    }
 
     public Categoria getOne(Integer id) {
         return categoriaRepository.findById(id).orElseThrow();

@@ -1,5 +1,8 @@
 package com.Finanzas.model;
 
+import java.time.LocalDate;
+
+import org.hibernate.annotations.DynamicInsert;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,33 +19,40 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tbl_presupuesto_categoria")
-@Getter
 @Setter
+@Getter
+@Table(name = "tbl_aporte_meta")
 @AllArgsConstructor
 @NoArgsConstructor
-public class PresupuestoCategoria {
+@DynamicInsert
+public class AporteMeta {
 
 	@Id
+	@Column(name = "id_aporte")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_presupuesto_categoria")
-	private Integer idPresupuestoCategoria;
+	private Integer idAporte;
 	
-	@Column(name = "monto_asignado")
-	private Double montoAsignado;
+	@Column(name = "fecha")
+	private LocalDate fecha;
+	
+	@Column(name = "monto_aporte")
+	private Double montoAporte;
+	
+	@Column(name = "observacion")
+	private String observacion;
 	
 	@Column(name = "activo")
 	private Boolean activo;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_meta")
+	private Meta meta;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_movimiento")
+	private Movimiento movimiento;
+	
 	public String getActivoDescripcion() {
 		return Boolean.TRUE.equals(activo) ? "Activo" : "Inactivo";
 	}
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_presupuesto")
-	private Presupuesto presupuesto;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_categoria")
-	private Categoria categoria;
 }

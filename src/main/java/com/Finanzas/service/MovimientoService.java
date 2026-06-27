@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.Finanzas.dto.ResultadoResponse;
 import com.Finanzas.model.Movimiento;
+import com.Finanzas.repository.AporteMetaRepository;
 import com.Finanzas.repository.MovimientoRepository;
 
 import jakarta.transaction.Transactional;
@@ -16,13 +17,14 @@ import lombok.RequiredArgsConstructor;
 public class MovimientoService {
 
     private final MovimientoRepository movimientoRepository;
+    private final AporteMetaRepository aporteMetaRepository;
 
     public List<Movimiento> getAll() {
         return movimientoRepository.findAllByOrderByIdMovimientoDesc();
     }
 
     public List<Movimiento> getByTipo(String tipo) {
-        return movimientoRepository.findByCategoriaTipoOrderByIdMovimientoDesc(tipo);
+        return movimientoRepository.findByCategoriaTipoIgnoreCaseOrderByIdMovimientoDesc(tipo);
     }
 
     public Movimiento getOne(Integer id) {
@@ -44,6 +46,11 @@ public class MovimientoService {
 
     public ResultadoResponse update(Movimiento movimiento) {
         try {
+            if (movimiento.getIdMovimiento() != null 
+                    && aporteMetaRepository.existsByMovimientoIdMovimiento(movimiento.getIdMovimiento())) {
+                return new ResultadoResponse(false, "Este movimiento pertenece a un aporte de meta y debe editarse desde Aportes");
+            }
+            
             movimiento.setActivo(true);
             movimientoRepository.save(movimiento);
 
@@ -58,6 +65,10 @@ public class MovimientoService {
     @Transactional
     public ResultadoResponse desactivar(Integer id) {
         try {
+            if (aporteMetaRepository.existsByMovimientoIdMovimiento(id)) {
+                return new ResultadoResponse(false, "Este movimiento pertenece a un aporte de meta y debe activarse o desactivarse desde Aportes");
+            }
+            
             var movimiento = movimientoRepository.findById(id).orElseThrow();
 
             movimiento.setActivo(!movimiento.getActivo());
@@ -71,4 +82,5 @@ public class MovimientoService {
             return new ResultadoResponse(false, "Error al cambiar estado del movimiento");
         }
     }
+
 }
