@@ -1,5 +1,7 @@
 package com.Finanzas.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import com.Finanzas.model.Movimiento;
 import com.Finanzas.model.Usuario;
 import com.Finanzas.service.CategoriaService;
 import com.Finanzas.service.MovimientoService;
+import com.Finanzas.service.UsuarioService;
 import com.Finanzas.util.Alert;
 
 import jakarta.servlet.http.HttpSession;
@@ -27,11 +30,19 @@ public class MovimientoController {
     private final CategoriaService categoriaService;
 
     @GetMapping("listado")
-    public String listado(Model model) {
-        model.addAttribute("lstMovimiento", movimientoService.getAll());
+    public String listado(Model model, HttpSession httpSession) {
+
+        Integer idTipo = (Integer) httpSession.getAttribute("idTipo");
+        Integer idUsuario = (Integer) httpSession.getAttribute("idUsuario");
+
+        if (idTipo == 1) {
+            model.addAttribute("lstMovimiento", movimientoService.getAll());
+        } else {
+            model.addAttribute("lstMovimiento", movimientoService.getByUsuario(idUsuario));
+        }
+
         return "movimiento/movimientosListado";
     }
-
     @GetMapping("ingresos")
     public String ingresos(Model model) {
         model.addAttribute("lstMovimiento", movimientoService.getByTipo("INGRESO"));
@@ -52,10 +63,8 @@ public class MovimientoController {
     }
 
     @PostMapping("registrar")
-    public String registrar(@ModelAttribute Movimiento movimiento,
-                            HttpSession session,
-                            RedirectAttributes flash) {
-
+    public String registrar(@ModelAttribute Movimiento movimiento,HttpSession session,RedirectAttributes flash) {
+                            
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
         Usuario usuario = new Usuario();
@@ -78,10 +87,8 @@ public class MovimientoController {
     }
 
     @PostMapping("guardar")
-    public String guardar(@ModelAttribute Movimiento movimiento,
-                          HttpSession session,
-                          RedirectAttributes flash) {
-
+    public String guardar(@ModelAttribute Movimiento movimiento, HttpSession session,RedirectAttributes flash) {
+                         
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
         Usuario usuario = new Usuario();

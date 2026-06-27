@@ -6,14 +6,94 @@
 
     <div class="dashboard-fondo p-5 rounded">
 
-        <h2 class="text-white mb-4">Panel de Control</h2>
+        <h2 class="text-white mb-4">
+            <i class="fa-solid fa-chart-line"></i>
+            Panel de Control
+        </h2>
 
         <div class="row g-4">
 
-           
+            <div class="col-md-4">
+                <div class="card shadow h-100 border-0">
+                    <div class="card-body text-center">
+
+                        <i class="fa-solid fa-arrow-trend-up fa-3x text-success mb-3"></i>
+
+                        <h4 class="fw-bold">Ingresos</h4>
+
+                        <p class="text-muted">
+                            Registra y consulta todos los ingresos obtenidos.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow h-100 border-0">
+                    <div class="card-body text-center">
+
+                        <i class="fa-solid fa-arrow-trend-down fa-3x text-danger mb-3"></i>
+
+                        <h4 class="fw-bold">Gastos</h4>
+
+                        <p class="text-muted">
+                            Lleva un control de tus gastos diarios y mensuales.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+			
+            <div class="col-md-4">
+                <div class="card shadow h-100 border-0">
+                    <div class="card-body text-center">
+
+                        <i class="fa-solid fa-layer-group fa-3x text-primary mb-3"></i>
+
+                        <h4 class="fw-bold">Categorías</h4>
+
+                        <p class="text-muted">
+                            Organiza tus movimientos mediante categorías.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card shadow border-0 mt-4">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+                    <i class="fa-solid fa-lightbulb text-warning"></i>
+                    Consejo financiero
+                </h5>
+
+                <blockquote class="blockquote mb-0">
+
+                    <p class="fst-italic">
+                        "No ahorres lo que queda después de gastar; gasta lo que queda después de ahorrar."
+                    </p>
+
+                    <footer class="blockquote-footer">
+                        Warren Buffett
+                    </footer>
+
+                </blockquote>
+
+            </div>
+
+        </div>
+
+    </div>
 
     <th:block th:utext="${alert}"></th:block>
     <th:block th:utext="${toast}"></th:block>
 
 </div>
+
 </html>

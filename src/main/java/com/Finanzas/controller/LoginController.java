@@ -47,7 +47,9 @@ public class LoginController {
 		httpSession.setAttribute("idTipo", usuario.getTipo().getIdTipo());
 		httpSession.setAttribute("tipoDescripcion", usuario.getTipo().getDescripcion());
 		
-		String alert = Alert.sweetImageUrl("Bienvenido " + usuario.getFullName(),"a tu<br><strong>Plataforma de Gestión Financiera", "/imagenes/mapache_pedro.gif");
+
+
+		String alert = Alert.sweetImageUrl("Bienvenido " + usuario.getFullName(),"a tu<br><strong>Plataforma de Gestión Financiera", "/imagenes/ironMaiden.gif");
 		flash.addFlashAttribute("alert", alert);
 		
 		return "redirect:/dashboard";

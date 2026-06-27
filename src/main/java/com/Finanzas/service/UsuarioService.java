@@ -21,6 +21,7 @@ public class UsuarioService {
 		return usuarioRepository.findAll();
 	}
 	
+	
 	public Usuario getOne(Integer id) {
 		return usuarioRepository.findById(id).orElseThrow();
 	}

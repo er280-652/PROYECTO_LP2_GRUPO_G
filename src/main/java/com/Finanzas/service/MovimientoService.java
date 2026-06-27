@@ -26,6 +26,11 @@ public class MovimientoService {
     public List<Movimiento> getByTipo(String tipo) {
         return movimientoRepository.findByCategoriaTipoIgnoreCaseOrderByIdMovimientoDesc(tipo);
     }
+    
+    public List<Movimiento> getByUsuario(Integer idUsuario) {
+		return movimientoRepository.findByUsuario(idUsuario);
+	}
+    
 
     public Movimiento getOne(Integer id) {
         return movimientoRepository.findById(id).orElseThrow();

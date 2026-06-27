@@ -1,157 +1,154 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout :: layoutBase(~{::contenido})}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layoutBase(~{::contenido})}">
 
 <div th:fragment="contenido">
 
-    <div class="card shadow border-0">
+	<div class="card shadow border-0">
 
-        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">
-                <i class="fa-solid fa-list"></i> Movimientos
-            </h4>
+		<div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+			<h4 class="mb-0">
+				<i class="fa-solid fa-list"></i> Movimientos
+			</h4>
 
-            <a href="/movimiento/nuevo" class="btn btn-primary">
-                <i class="fa-solid fa-plus"></i> Nuevo Movimiento
-            </a>
-        </div>
+			<a href="/movimiento/nuevo" class="btn btn-primary">
+				<i class="fa-solid fa-plus"></i> Nuevo Movimiento
+			</a>
+		</div>
 
-        <div class="card-body">
+		<div class="card-body">
 
-           
+			<div>
+				<a th:if="${session.idTipo == 1}" href="/reporte/movimientos" target="_blank"
+					class="btn btn-danger me-2">
+					<i class="fa-solid fa-file-pdf"></i> Reporte PDF
+				</a>
+			</div>
 
-            <div class="table-responsive">
+			<div class="table-responsive">
 
-                <table id="tablaMovimientos"
-                       class="table table-bordered table-hover align-middle text-center">
+				<table id="tablaMovimientos" class="table table-bordered table-hover align-middle text-center">
 
-                    <thead class="text-white" style="background-color: #0d6efd;">
-                        <tr>
-                            <th>Id</th>
-                            <th>Fecha</th>
-                            <th>Descripción</th>
-                            <th>Monto</th>
-                            <th>Categoría</th>
-                            <th>Tipo</th>
-                            <th>Activo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
+					<thead class="text-white" style="background-color: #0d6efd;">
+						<tr>
+							<th>Id</th>
+							<th>Fecha</th>
+							<th>Descripción</th>
+							<th>Monto</th>
+							<th>Categoría</th>
+							<th>Tipo</th>
+							<th>Activo</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
 
 					<tbody>
-					    <tr th:each="m : ${lstMovimiento}"
-					        th:classappend="${m.activo == false} ? 'table-secondary text-muted' : ''">
+						<tr th:each="m : ${lstMovimiento}"
+							th:classappend="${m.activo == false} ? 'table-secondary text-muted' : ''">
 
-					        <td th:text="${m.idMovimiento}" class="text-center"></td>
+							<td th:text="${m.idMovimiento}" class="text-center"></td>
 
-					        <td th:text="${m.fecha}" class="text-center"></td>
+							<td th:text="${m.fecha}" class="text-center"></td>
 
-					        <td th:text="${m.descripcion}"></td>
+							<td th:text="${m.descripcion}"></td>
 
-					        <td>
-					            <span th:if="${m.categoria.tipo == 'ingreso'}"
-					                  class="fw-bold text-success">
-					                S/. <span th:text="${m.monto}"></span>
-					            </span>
+							<td>
+								<span th:if="${m.categoria.tipo == 'ingreso'}" class="fw-bold text-success">
+									S/. <span th:text="${m.monto}"></span>
+								</span>
 
-					            <span th:if="${m.categoria.tipo == 'gasto'}"
-					                  class="fw-bold text-danger">
-					                S/. <span th:text="${m.monto}"></span>
-					            </span>
-					        </td>
+								<span th:if="${m.categoria.tipo == 'gasto'}" class="fw-bold text-danger">
+									S/. <span th:text="${m.monto}"></span>
+								</span>
+							</td>
 
-					        <td th:text="${m.categoria.descripcion}"></td>
+							<td th:text="${m.categoria.descripcion}"></td>
 
-					        <td>
-					            <span th:if="${m.categoria.tipo == 'ingreso'}"
-					                  class="badge bg-success">
-					                INGRESO
-					            </span>
+							<td>
+								<span th:if="${m.categoria.tipo == 'ingreso'}" class="badge bg-success">
+									INGRESO
+								</span>
 
-					            <span th:if="${m.categoria.tipo == 'gasto'}"
-					                  class="badge bg-danger">
-					                GASTO
-					            </span>
-					        </td>
+								<span th:if="${m.categoria.tipo == 'gasto'}" class="badge bg-danger">
+									GASTO
+								</span>
+							</td>
 
 
-					        <td>
-					            <span th:if="${m.activo}" class="badge bg-success">
-					                Activo
-					            </span>
+							<td>
+								<span th:if="${m.activo}" class="badge bg-success">
+									Activo
+								</span>
 
-					            <span th:if="${m.activo == false}" class="badge bg-secondary">
-					                Inactivo
-					            </span>
-					        </td>
+								<span th:if="${m.activo == false}" class="badge bg-secondary">
+									Inactivo
+								</span>
+							</td>
 
-					        <td>
-					            <a class="btn btn-outline-primary btn-sm"
-					               th:href="@{/movimiento/edicion/{id}(id=${m.idMovimiento})}"
-					               title="Editar movimiento">
-					                <i class="fa-solid fa-pen-to-square"></i>
-					            </a>
+							<td>
+								<a class="btn btn-outline-primary btn-sm"
+									th:href="@{/movimiento/edicion/{id}(id=${m.idMovimiento})}"
+									title="Editar movimiento">
+									<i class="fa-solid fa-pen-to-square"></i>
+								</a>
 
-					            <form th:action="@{/movimiento/desactivar}"
-					                  method="post"
-					                  style="display:inline;">
+								<form th:action="@{/movimiento/desactivar}" method="post" style="display:inline;">
 
-					                <input type="hidden"
-					                       name="id"
-					                       th:value="${m.idMovimiento}">
+									<input type="hidden" name="id" th:value="${m.idMovimiento}">
 
-					                <button type="submit"
-					                        th:class="${m.activo} ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm'"
-					                        onclick="return confirm('¿Deseas cambiar el estado de este movimiento?');">
+									<button type="submit"
+										th:class="${m.activo} ? 'btn btn-primary btn-sm' : 'btn btn-secondary btn-sm'"
+										onclick="return confirm('¿Deseas cambiar el estado de este movimiento?');">
 
-					                    <i th:class="${m.activo} ? 'fa-solid fa-toggle-on' : 'fa-solid fa-toggle-off'"></i>
-					                </button>
+										<i
+											th:class="${m.activo} ? 'fa-solid fa-toggle-on' : 'fa-solid fa-toggle-off'"></i>
+									</button>
 
-					            </form>
-					        </td>
+								</form>
+							</td>
 
-					    </tr>
+						</tr>
 
-					    <tr th:if="${#lists.isEmpty(lstMovimiento)}">
-					        <td colspan="8" class="text-muted py-4">
-					            No hay movimientos registrados.
-					        </td>
-					    </tr>
+						<tr th:if="${#lists.isEmpty(lstMovimiento)}">
+							<td colspan="8" class="text-muted py-4">
+								No hay movimientos registrados.
+							</td>
+						</tr>
 					</tbody>
 
-                </table>
+				</table>
 
-            </div>
+			</div>
 
-        </div>
+		</div>
 
-    </div>
+	</div>
 
-    <script>
-        $(document).ready(function () {
+	<script>
+		$(document).ready(function () {
 
-            const tabla = $('#tablaMovimientos').DataTable({
-                responsive: true,
-                language: {
-                    search: "Buscar:",
-                    lengthMenu: "Mostrar _MENU_ registros",
-                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                    zeroRecords: "No se encontraron movimientos",
-                    paginate: {
-                        next: "Siguiente",
-                        previous: "Anterior"
-                    }
-                },
-                columnDefs: [
-                    { targets: [7], orderable: false },
-                    { targets: [4, 5, 7], searchable: false }
-                ]
-            });
+			const tabla = $('#tablaMovimientos').DataTable({
+				responsive: true,
+				language: {
+					search: "Buscar:",
+					lengthMenu: "Mostrar _MENU_ registros",
+					info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+					zeroRecords: "No se encontraron movimientos",
+					paginate: {
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+				columnDefs: [
+					{targets: [7], orderable: false},
+					{targets: [4, 5, 7], searchable: false}
+				]
+			});
 
-           
 
-        });
-    </script>
+
+		});
+	</script>
 
 </div>
+
 </html>
